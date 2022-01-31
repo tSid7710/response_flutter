@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 final _firestore = FirebaseFirestore.instance;
@@ -12,11 +11,11 @@ class ViewResponses extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Response'),
+        title: const Text('Response'),
       ),
       body: SafeArea(
         child: Column(
-          children: [
+          children: const [
             Text('Hello'),
           ],
         ),
