@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class NewVoting extends StatefulWidget {
@@ -12,6 +12,9 @@ class NewVoting extends StatefulWidget {
 class _NewVotingState extends State<NewVoting> {
   String? selectedOption;
   int favourite = 0;
+  String? opinion;
+  TextEditingController opin = TextEditingController();
+  final _firestore = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,11 +118,16 @@ class _NewVotingState extends State<NewVoting> {
               const SizedBox(
                 height: 10,
               ),
-              const TextField(
+              TextField(
+                controller: opin,
+                onChanged: (String? value) {
+                  opinion = value!;
+                },
                 maxLines: 5,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Write your feedback here'),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Write your feedback here',
+                ),
               ),
               const SizedBox(
                 height: 10.0,
@@ -130,14 +138,25 @@ class _NewVotingState extends State<NewVoting> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextButton(
-                  onPressed: () {},
-                  child: const Text('Submit Response',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0,
-                      )),
+                  onPressed: () {
+                    _firestore.collection('feedbacks').add({
+                      'selectedOption': selectedOption,
+                      'opinion': opinion,
+                      'success': favourite,
+                    });
+                    opin.clear();
+                    favourite = 0;
+                    selectedOption = "";
+                  },
+                  child: const Text(
+                    'Submit Response',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15.0,
+                    ),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),

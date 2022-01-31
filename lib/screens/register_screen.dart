@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:response_flutter/screens/phone_auth.dart';
 import 'login_screen.dart';
 
 final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
 
 class RegisterPage extends StatefulWidget {
   static const String id = "register_screen";
@@ -210,11 +212,11 @@ class _RegisterPageState extends State<RegisterPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               final provider =
                                   Provider.of<GoogleSignInProvider>(context,
                                       listen: false);
-                              provider.login();
+                              await provider.login();
                               Navigator.pushNamed(context, HomePage.id);
                             },
                             child: const CircleAvatar(

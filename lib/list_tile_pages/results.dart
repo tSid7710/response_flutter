@@ -1,18 +1,32 @@
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ResultPage extends StatelessWidget {
+final _auth = FirebaseAuth.instance;
+final _firestore = FirebaseFirestore.instance;
+
+class ResultPage extends StatefulWidget {
   static const String id = "result_page";
   const ResultPage({Key? key}) : super(key: key);
-  static final List<Responses> responses = [
-    Responses("Option1", 21, Colors.green),
-    Responses("Option2", 33, Colors.yellow),
-    Responses("Option3", 10, Colors.blue),
-    Responses("Option4", 36, Colors.orange),
-  ];
+  @override
+  State<ResultPage> createState() => _ResultPageState();
+}
+
+class _ResultPageState extends State<ResultPage> {
   @override
   Widget build(BuildContext context) {
+    final snap = _firestore.collection("feedbacks").get();
+    // for (var msg in snap) {
+    //   String op = snap['option'];
+    // }
+    List<Responses> responses = [
+      Responses("Option1", 21, Colors.green),
+      Responses("Option2", 33, Colors.yellow),
+      Responses("Option3", 10, Colors.blue),
+      Responses("Option4", 36, Colors.orange),
+    ];
+
     List<charts.Series<Responses, String>> series = [
       charts.Series(
         data: responses,
@@ -34,7 +48,7 @@ class ResultPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Container(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height / 2,
             decoration: BoxDecoration(
